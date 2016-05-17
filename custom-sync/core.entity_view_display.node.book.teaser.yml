@@ -1,0 +1,17 @@
+uuid: f5ec3e1f-0d78-4e78-9e23-a30f833792ff
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - node.type.book
+  module:
+    - user
+id: node.book.teaser
+targetEntityType: node
+bundle: book
+mode: teaser
+content:
+  links:
+    weight: 100
+hidden: {  }
