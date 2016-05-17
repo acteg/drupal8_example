@@ -1,0 +1,53 @@
+version: '2'
+services:
+  # web with xdebug - actency images
+  web:
+    # actency/docker-apache-php available tags: latest, 7.0, 5.6, 5.5, 5.4, 5.3
+    image: actency/docker-apache-php:5.6
+    # actency/docker-nginx-php available tags: latest, 5.6, 5.5, 5.4
+    #image: actency/docker-nginx-php:5.6
+    ports:
+      - "80:80"
+      - "9000:9000"
+    environment:
+      - SERVERNAME=d8.local
+      - SERVERALIAS=d8_local.local *.d8.local
+      - DOCUMENTROOT=htdocs
+    volumes:
+      - /home/abdou/projects/d8/:/var/www/html/
+      - /home/abdou/.ssh/:/var/www/.ssh/
+    links:
+      - database:mysql
+      - mailhog
+    tty: true
+  # database container - actency images
+  database:
+    # actency/docker-mysql available tags: latest, 5.7, 5.6, 5.5
+    image: actency/docker-mysql:5.6
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=d8
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+    #volumes:
+      #- /my/custom:/etc/mysql/conf.d/
+
+  # phpmyadmin container - actency images
+  phpmyadmin:
+    image: actency/docker-phpmyadmin
+    ports:
+      - "8010:80"
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlroot
+      - UPLOAD_SIZE=1G
+    links:
+      - database:mysql
+
+  # mailhog container - official images
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
